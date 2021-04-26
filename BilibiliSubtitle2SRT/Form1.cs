@@ -89,6 +89,7 @@ namespace BilibiliSubtitle2SRT
 
         private string SecondToTime(string s)
         {
+            s = s.Replace(".", ",");
             TimeSpan t = TimeSpan.FromSeconds(Convert.ToDouble(s));
             string result = string.Format("{0:D2}:{1:D2}:{2:D2},{3:D3}",
                                     t.Hours,
@@ -147,6 +148,37 @@ namespace BilibiliSubtitle2SRT
                 flag++;
             }
             textBox2.Text = temp;
+        }
+
+        private void convertButton_Click(object sender, EventArgs e)
+        {
+            if (textBox1.Text != "")
+            {
+                processBiliSub();
+                BiliSubToSrt();
+                //this.Text = "finished";
+                myBiliSub.Clear();
+            }
+        }
+
+        private void saveButton_Click(object sender, EventArgs e)
+        {
+            if (file_path == "")
+            {
+                saveFileDialog1.FileName = "bilibilisub.srt";
+            }
+            else
+            {
+                saveFileDialog1.InitialDirectory = Path.GetDirectoryName(file_path);
+                saveFileDialog1.FileName = Path.GetFileNameWithoutExtension(file_path);
+                
+            }
+            saveFileDialog1.ShowDialog();
+        }
+
+        private void saveFileDialog1_FileOk(object sender, CancelEventArgs e)
+        {
+            File.WriteAllText(saveFileDialog1.FileName, textBox2.Text);
         }
     }
 }
